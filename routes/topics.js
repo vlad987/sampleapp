@@ -5,17 +5,28 @@ var router = express.Router();
 var Topic = require('../models/topic').Topic;
 
 
-// POST /api/topics/create
-router.post('/create/', function(req, res, next) {
+//  GET	/api/topics - Returns all topics
+
+router.get('/', function(req, res, next){
+    Topic.find(function(err, topics){
+        if(err){
+            console.error(err);
+            return res.json(err);
+        }res.json(topics);
+      });
+});
+
+// POST /api/topics
+router.post('/', function(req, res, next) {
 
     var params = req.body;
 
     console.log(params);
 
-    if(params.topicName){
+    if(params.name){
 
         var topicObject = {
-            name: params.topicName
+            name: params.name
         };
 
         var newTopic = new Topic(topicObject);
@@ -30,13 +41,13 @@ router.post('/create/', function(req, res, next) {
 
     }else{
         //if missing parameters returs error
-        res.status(500).send({ error: 'missing parameters' });
+        res.status(400).send({ error: 'missing parameters' });
     }
 
 });
 
-// GET /api/topics/single/1234
-router.get('/single/:id', function(req, res, next) {
+// GET /api/topics/:id
+router.get('/:id', function(req, res, next) {
 
     var params = req.params;
 
@@ -47,9 +58,9 @@ router.get('/single/:id', function(req, res, next) {
       var update = { $inc: { viewCount: 1 }};
       var options = {new: true};
 
-      var query = Topic.findOneAndUpdate(conditions, update, options)
+      var query = Topic.findOneAndUpdate(conditions, update, options);
 
-      query.select("-created -__v");
+      query.select("name created viewCount _id");
 
       query.exec(function(err, entry) {
           // next(err, entry);
@@ -59,11 +70,70 @@ router.get('/single/:id', function(req, res, next) {
           res.json({'success': entry});
       });
     }else{
-        res.sendStatus(404);
+        res.sendStatus(400);
     }
 
 });
 
 //..add others HERE
+
+// PUT /api/topics/1234 - Updates single topic with req.body data by req.params.id
+
+router.put('/:id', function(req, res, next){
+
+    var params = req.params;
+    var postData = req.body;
+
+    //id in the URL & post data topicName
+   if(params.id && postData.name){
+
+       var conditions = {_id: params.id};
+       var update = {name: postData.name};
+       var options = {new: true};
+
+       var query = Topic.findOneAndUpdate(conditions, update, options);
+
+       query.exec(function(err, topic) {
+           if(err){
+               console.error(err);
+               return res.json({"error":"did not find any matching topic or wrong data to update"});
+           }
+           res.json(topic);
+       });
+
+   }else{
+       res.sendStatus(400);
+   }
+
+});
+
+// delete /api/topics/1234 - Deletes single topic
+router.delete('/:id', function(req, res, next) {
+
+   var params = req.params;
+
+   //id in the URL & post data topicName
+   if(params.id){
+
+       var conditions = {_id: params.id};
+       var update = {deleted: new Date()};
+       var options = {new: true};
+
+       var query = Topic.findOneAndUpdate(conditions, update, options);
+
+       query.exec(function(err, topic) {
+           if(err){
+               console.error(err);
+               return res.json({"error":"did not find any matching topic or wrong data to update"});
+           }
+           res.json(topic);
+       });
+
+   }else{
+       res.sendStatus(400);
+   }
+
+});
+
 
 module.exports = router;
