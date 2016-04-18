@@ -13,9 +13,8 @@
                  <md-dialog-actions flex>
                     <span flex></span>
                     <md-button ng-click="closeDialog()">Cancel</md-button>
-                    <input type="submit" class="md-button md-primary" ng-click="save(topic)" ng-if="action === 'add'" value='Add'></input>
+                    <input type="submit" class="add md-button md-primary" ng-click="save(topic)" ng-if="action === 'add'" value='Add'></input>
                     <input type="submit" class="md-button md-primary" ng-click="update(topic)" ng-if="action === 'edit'" value='Update'></input>
-
                 </md-dialog-actions>
             </div>
         </form>

@@ -1,5 +1,5 @@
 var expect = require('chai').expect;
-var sinon = require('sinon');
+// var sinon = require('sinon');
 var request = require('supertest');
 var config = require('../config');
 
@@ -23,5 +23,50 @@ describe('routes', function(){
     });
 
     //Tests go here
+    it('should create new topic on post / and return it', function(done) {
+      request(app)
+          .post('/api/topics/')
+          .send({
+              name:'my awesome topic'
+          })
+          .expect(200)
+          .expect('Content-Type', /json/)
+          .end(function(err, res) {
+              if (err) return done(err);
+              expect(res.body).to.be.an('Object');
+              expect(res.body._id).to.not.be.an('undefined');
+              done();
+              });
+      });
+
+      it('should create new topic on post / and return it', function(done) {
+          request(app)
+              .post('/api/topics/')
+              .send({
+                  name:'my awesome topic'
+              })
+              .expect(200)
+              .expect('Content-Type', /json/)
+              .end(function(err, res) {
+                  if (err) return done(err);
+                  expect(res.body).to.be.an('Object');
+                  expect(res.body._id).to.exist;
+                  done();
+              });
+      });
+
+      it('should respond to GET / with an array of topics', function(done) {
+          request(app)
+            .get('/api/topics/')
+            .expect(200)
+            .expect('Content-Type', /json/)
+            .end(function(err, res) {
+              if (err) return done(err);
+              expect(res.body).to.be.a('Array');
+              console.log('Got '+res.body.length+' Topics');
+              done();
+            });
+      });
+
 
 });

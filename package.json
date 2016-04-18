@@ -16,6 +16,10 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "jasmine-core": "^2.4.1",
+    "karma": "^0.13.22",
+    "karma-jasmine": "^0.3.8",
+    "karma-phantomjs-launcher": "^1.0.0",
     "sinon": "^1.17.3",
     "supertest": "^1.2.0"
   }
