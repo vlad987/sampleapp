@@ -135,4 +135,31 @@ router.delete('/:id', function(req, res, next) {
 
 });
 
+//unarchive
+// router.put('/:id', function(req, res, next){
+//
+//     var params = reqq.params;
+//
+//     if(params.id){
+//         var conditions = {_id: params.id};
+//         var update = {$unset: { deleted : 1 }};
+//         var options = {new: true};
+//
+//         var query = Topic.update(conditions, update, options);
+//
+//         query.exec(function(err, topic) {
+//             if(err){
+//                 console.error(err);
+//                 return res.json({"error":"did not find any matching topic or wrong data to update"});
+//             }
+//             res.json(topic);
+//             });
+//
+//             }else{
+//                 res.sendStatus(400);
+//             }
+//
+//
+// });
+
 module.exports = router;

@@ -92,12 +92,17 @@
                       );
                 }
 
+                // $scope.unarchive = function{
+                //
+                //
+                // }
+
 
                 $scope.navigateTo = function(id){
                   console.log(id);
                   $location.path("/topic/"+id);
                 };
-                
+
 
 
 
